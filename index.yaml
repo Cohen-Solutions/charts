@@ -1,0 +1,125 @@
+apiVersion: v1
+entries:
+  authoritative-dns:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-03-08T09:43:20.791954981Z"
+    description: A Helm chart for Kubernetes
+    digest: 30f1656b4fc375c9e6045bfababa51261516a1734586c7454be7e9906c9009ec
+    name: authoritative-dns
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/authoritative-dns-1.0.8/authoritative-dns-1.0.8.tgz
+    version: 1.0.8
+  common:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-03-08T09:43:20.900654562Z"
+    description: A Helm chart for Kubernetes
+    digest: 985518fbc53759dc40cb6376837ea50b1e28e7ce22e596797e7c33ed5bf86323
+    name: common
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/common-1.0.0/common-1.0.0.tgz
+    version: 1.0.0
+  mqtt2prom:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-03-08T09:43:20.998128596Z"
+    description: A Helm chart for Kubernetes
+    digest: 42bd58acbf1cbfb7ece23f6739d52b8fdacf69b46662af7cc6897b2e2e0ebc62
+    name: mqtt2prom
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/mqtt2prom-0.1.0/mqtt2prom-0.1.0.tgz
+    version: 0.1.0
+  nodered:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-03-08T09:43:21.086566791Z"
+    description: A Helm chart for Kubernetes
+    digest: ec1908ca8437213d8a593c300e4bd3096e8cee149c4dce659c877d0d91f955dd
+    name: nodered
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/nodered-0.1.0/nodered-0.1.0.tgz
+    version: 0.1.0
+  nut-webui:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-03-08T09:43:21.195539924Z"
+    description: A Helm chart for Kubernetes
+    digest: 89f358cab435800439a79e74d520fe76ba3bf2b9d22f2e244d8413c83553f5a7
+    name: nut-webui
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/nut-webui-0.1.0/nut-webui-0.1.0.tgz
+    version: 0.1.0
+  powerdns-admin:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-03-08T09:43:21.286543516Z"
+    description: A Helm chart for Kubernetes
+    digest: ea9a4d7fa9ddde07cd246f48b59213ae77a2bbaba5785c2e796f2225f4b50808
+    name: powerdns-admin
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/powerdns-admin-0.1.0/powerdns-admin-0.1.0.tgz
+    version: 0.1.0
+  prom2mqtt:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-03-08T09:43:21.387411237Z"
+    description: A Helm chart for Kubernetes
+    digest: be722eb0a82eae70a07427a99dc8bbdd36ad62c27d80750b54a2c9b9652481be
+    name: prom2mqtt
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/prom2mqtt-0.1.1/prom2mqtt-0.1.1.tgz
+    version: 0.1.1
+  qbittorrent:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-03-08T09:43:21.478044157Z"
+    description: A Helm chart for Kubernetes
+    digest: 8bab8ec0918aa7b0e513685f427c350757527f50af02e8736b99f73cad854117
+    name: qbittorrent
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/qbittorrent-0.1.4/qbittorrent-0.1.4.tgz
+    version: 0.1.4
+  wyoming-piper:
+  - apiVersion: v2
+    appVersion: 1.4.0
+    created: "2025-03-08T09:43:21.579355416Z"
+    dependencies:
+    - name: common
+      repository: https://library-charts.k8s-at-home.com
+      version: 4.5.2
+    description: Wyoming Piper
+    digest: 22780c1589d22629c3710613c90fdac207956e9b02af715964b1b2d76ba1648f
+    home: https://github.com/cohen-solutions/helm-charts/tree/main/charts/wyoming-piper
+    keywords:
+    - piper
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: clement@cohenc.fr
+      name: Clement Cohen
+    name: wyoming-piper
+    sources:
+    - https://hub.docker.com/r/rhasspy/wyoming-piper
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/wyoming-piper-1.0.3/wyoming-piper-1.0.3.tgz
+    version: 1.0.3
+  wyoming-whisper:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-03-08T09:43:21.688335466Z"
+    description: A Helm chart for Kubernetes
+    digest: f7abc1d323f8dcd7606424eab22af7c54f44482ae271a4c285f64319f847d49d
+    name: wyoming-whisper
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/wyoming-whisper-0.1.4/wyoming-whisper-0.1.4.tgz
+    version: 0.1.4
+generated: "2025-03-08T09:43:21.688342579Z"
