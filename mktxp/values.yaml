@@ -1,0 +1,169 @@
+# Default values for mqtt2prom.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/hikhvar/mqtt2prometheus
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 9641
+  targetPort: 9641
+  name: mqtt2prom
+
+ingressroute:
+  enabled: false
+  entryPoints:
+    - websecure
+  routes:
+    - url: pdns.pub.cohenc.fr
+      middlewares:
+        - name: chain-no-auth
+          namespace: traefik
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# livenessProbe:
+#   httpGet:
+#     path: /
+#     port: mqtt2prom
+# readinessProbe:
+#   httpGet:
+#     path: /
+#     port: mqtt2prom
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+metrics:
+  enabled: false
+config_file:
+  data: |
+    [mkt-home]
+        enabled = True         # turns metrics collection for this RouterOS device on / off
+
+        hostname = 192.168.120.254 # RouterOS IP address
+        port = 8728             # RouterOS IP Port
+
+        username = mktxp_user     # RouterOS user, needs to have 'read' and 'api' permissions
+        password = changeme
+
+        use_ssl = False                 # enables connection via API-SSL servis
+        no_ssl_certificate = False      # enables API_SSL connect without router SSL certificate
+        ssl_certificate_verify = False  # turns SSL certificate verification on / off
+
+        installed_packages = True       # Installed packages
+        dhcp = True                     # DHCP general metrics
+        dhcp_lease = True               # DHCP lease metrics
+
+        connections = True              # IP connections metrics
+        connection_stats = False        # Open IP connections metrics
+
+        pool = True                     # Pool metrics
+        interface = True                # Interfaces traffic metrics
+
+        firewall = True                 # IPv4 Firewall rules traffic metrics
+        ipv6_firewall = False           # IPv6 Firewall rules traffic metrics
+        ipv6_neighbor = False           # Reachable IPv6 Neighbors
+
+        poe = False                     # POE metrics
+        monitor = True                  # Interface monitor metrics
+        netwatch = True                 # Netwatch metrics
+        public_ip = True                # Public IP metrics
+        route = True                    # Routes metrics
+        wireless = False            # WLAN general metrics
+        wireless_clients = False        # WLAN clients metrics
+        capsman = False                 # CAPsMAN general metrics
+        capsman_clients = False         # CAPsMAN clients metrics
+
+        user = True                     # Active Users metrics
+        queue = True                    # Queues metrics
+
+        remote_dhcp_entry = None        # An MKTXP entry for remote DHCP info resolution (capsman/wireless)
+
+        use_comments_over_names = True  # when available, forces using comments over the interfaces names
+
+        check_for_updates = False       # check for available ROS updates

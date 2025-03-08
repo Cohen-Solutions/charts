@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mqtt2prom.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "mqtt2prom.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  configuration.yaml: |
+    {{- .Values.config_file | toYaml | nindent 4 -}}

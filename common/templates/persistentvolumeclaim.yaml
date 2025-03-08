@@ -1,0 +1,19 @@
+{{- $labels := include "common.labels" . -}}
+{{- range .Values.persistences }}
+---
+{{- if and .enabled (not .existingClaim)  (not .configMap) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+ name: {{ .name }}
+ labels:
+   {{- $labels | nindent 4 }}  
+spec:
+ storageClassName: {{ .storageClass }}
+ accessModes:
+   - {{ .accessMode | quote }}
+ resources:
+   requests:
+     storage: {{ .size | quote }}
+ {{- end }}
+ {{- end }}

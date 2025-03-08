@@ -1,0 +1,23 @@
+{{- $fullName := include "common.fullname" . -}}
+{{- $labels := include "common.labels" . -}}
+{{- $selectorLabels := include "common.selectorLabels" . -}}
+{{- range .Values.services }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  type: {{ .type }}
+  ports:
+  {{- range .mappings }}
+    - name: {{ .name }}
+      port: {{ .port }}
+      targetPort: {{ .targetPort | default .port }}
+      protocol: {{ .protocol }}
+  {{- end }}
+  selector:
+    {{- $selectorLabels | nindent 4 }}
+{{- end }}

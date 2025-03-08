@@ -1,0 +1,15 @@
+{{- $labels := include "common.labels" . -}}
+{{- range .Values.persistences }}
+{{- if not .size }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- $labels | nindent 4 }}
+data:
+  {{ .subPath }}: |
+    {{- .values | nindent 4 }}
+{{- end }}
+{{- end }}

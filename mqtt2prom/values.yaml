@@ -1,0 +1,173 @@
+# Default values for mqtt2prom.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/hikhvar/mqtt2prometheus
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 9641
+  targetPort: 9641
+  name: mqtt2prom
+
+ingressroute:
+  enabled: false
+  entryPoints:
+    - websecure
+  routes:
+    - url: pdns.pub.cohenc.fr
+      middlewares:
+        - name: chain-no-auth
+          namespace: traefik
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# livenessProbe:
+#   httpGet:
+#     path: /
+#     port: mqtt2prom
+# readinessProbe:
+#   httpGet:
+#     path: /
+#     port: mqtt2prom
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+config_file:
+  # Sample MQTT messages from Shelly H&T processed by this configuration file:
+  # $ mosquitto_sub -h 127.0.0.1 -t 'shellies/+/sensor/+' -v -u bob -P happylittleclouds
+  #
+  # shellies/shellyht-CC2D76/sensor/temperature 24.75
+  # shellies/shellyht-CC2D76/sensor/humidity 43.5
+  # shellies/shellyht-CC2D76/sensor/battery 100
+  # shellies/shellyht-CC2D76/sensor/ext_power false
+  # shellies/shellyht-CC2D76/sensor/error 0
+  # shellies/shellyht-CC2D76/sensor/act_reasons ["sensor"]
+
+  mqtt:
+    server: tcp://mosquitto.mqtt:1883
+    # topic_path: zigbee2mqtt/prise_serveurs/+/sensor/+
+    topic_path: "zigbee2mqtt/#"
+    device_id_regex: "zigbee2mqtt/(?P<deviceid>.*)"
+    object_per_topic_config:
+      encoding: JSON
+      
+    qos: 0
+  cache:
+    timeout: 24h
+  metrics:
+    - prom_name: power
+      mqtt_name: power
+      type: gauge
+      const_labels:
+        sensor_type: zigbee2mqtt
+    - prom_name: current
+      mqtt_name: current
+      type: gauge
+      const_labels:
+        sensor_type: zigbee2mqtt
+    - prom_name: energy
+      mqtt_name: energy
+      type: counter
+      const_labels:
+        sensor_type: zigbee2mqtt
+    - prom_name: voltage
+      mqtt_name: voltage
+      type: gauge
+      const_labels:
+        sensor_type: zigbee2mqtt
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    honorLabels: true
+    metricRelabelings: []
+    relabelings: []
