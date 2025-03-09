@@ -37,11 +37,6 @@ spec:
       runtimeClass: nvidia
       {{- end }}
       containers:
-      {{- if .Values.gpu.enabled }}
-        - name: nvidia-smi
-          image: nvidia/cuda:12.1.0-base-ubuntu22.04
-          command: ['sh', '-c', "nvidia-smi"]
-      {{- end }}
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
