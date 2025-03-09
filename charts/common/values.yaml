@@ -22,6 +22,9 @@ env_var:
   - name: TORRENTING_PORT
     value: "30123"
 
+gpu:
+  enabled: false
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
