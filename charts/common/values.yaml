@@ -149,3 +149,10 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+monitoring:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+    additionalServiceMonitorLabels:
+      release: prometheus-home
