@@ -44,6 +44,9 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.image.containerArgs }}
+          args: {{ .Values.image.containerArgs }}
+          {{- end }}
           env:
             {{- with .Values.env_var }}
             {{- toYaml . | nindent 12 }}
