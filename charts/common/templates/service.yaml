@@ -10,6 +10,12 @@ metadata:
   labels:
     {{- $labels | nindent 4 }}
 spec:
+  {{- if .ipv6 }}
+  ipFamilyPolicy: "PreferDualStack"
+  ipFamilies:
+    - IPv4
+    - IPv6
+  {{- end }}
   type: {{ .type }}
   ports:
   {{- range .mappings }}

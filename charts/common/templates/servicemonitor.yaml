@@ -16,7 +16,26 @@ spec:
     matchNames:
       - {{ .Release.Namespace }}
   endpoints:
-  - port: "{{ .Values.monitoring.serviceMonitor.port }}"
-    interval: 15s
-    honorLabels: true
+  {{- if .Values.monitoring.serviceMonitor.endpoints }}
+    {{ toYaml .Values.monitoring.serviceMonitor.endpoints | indent 4 }}
+  {{- else }}
+    - port: "{{ .Values.monitoring.serviceMonitor.port }}"
+      interval: '{{ .Values.monitoring.serviceMonitor.interval | default "15s" }}'
+      honorLabels: true
+      scrapeTimeout: '{{ .Values.monitoring.serviceMonitor.scrapeTimeout | default "10s" }}'
+      {{- if .Values.monitoring.serviceMonitor.params }}
+      params:
+        {{- range $key, $value := .Values.monitoring.serviceMonitor.params }}
+        {{ $key }}: 
+          - {{ $value | quote }}
+        {{- end }}
+      {{- end }}
+      path: '{{ .Values.monitoring.serviceMonitor.path | default "/metrics" }}'
+      {{- if .Values.monitoring.serviceMonitor.additionalLabels }}
+      {{- range $key, $value := .Values.monitoring.serviceMonitor.additionalLabels }}
+      {{ $key }}: {{ $value }}
+      {{- end }}
+      {{- end }}
+      
+  {{- end }}
 {{- end }}

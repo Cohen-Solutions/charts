@@ -55,15 +55,18 @@ securityContext: {}
   # runAsUser: 1000
 
 services:
-  type: ClusterIP
-  mappings:
-    - name: http
-      port: 8080
-      protocol: TCP
-    - name: torrent
-      port: 30123
-      protocol: TCP
-    
+  - name: "no-name"
+    type: ClusterIP
+    ipv6: false
+    mappings:
+      - name: http
+        port: 8080
+        protocol: TCP
+      - name: torrent
+        port: 30123
+        protocol: TCP
+
+
     
 service:
   type: ClusterIP
