@@ -14,6 +14,16 @@ entries:
   common:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2025-05-01T12:27:22.415943069Z"
+    description: A Helm chart for Kubernetes
+    digest: 9ad0c71fb8b8ff43e2cf0fd07d7087d666622a221fdd0f7797e870d1e38039cb
+    name: common
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/common-1.1.0/common-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2025-04-06T11:34:31.276092081Z"
     description: A Helm chart for Kubernetes
     digest: 345ffe8a49d158c67d4e2a593ab8f0220d8a21f8f69498f4f11745ff728e5695
@@ -212,4 +222,4 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/wyoming-whisper-0.1.4/wyoming-whisper-0.1.4.tgz
     version: 0.1.4
-generated: "2025-04-06T11:34:31.276148817Z"
+generated: "2025-05-01T12:27:22.415988214Z"
