@@ -84,12 +84,15 @@ spec:
       volumes:
       {{- range .Values.persistences }}
         - name: {{ .name }}
-          {{- if and .enabled  (not .configMap | default false) }}
-          persistentVolumeClaim:
-            claimName: {{ .existingClaim | default .name }}
-          {{- else if .configMap }}
+          {{- if .configMap }}
           configMap:
             name: {{ .name }}
+          {{- else if .secret }}
+          secret:
+            secretName: {{ .name }}
+          {{- else if and .enabled  (not .configMap | default false) }}
+          persistentVolumeClaim:
+            claimName: {{ .existingClaim | default .name }}
           {{- else }}
           emptyDir: { }
           {{- end }}

@@ -1,7 +1,7 @@
 {{- $labels := include "common.labels" . -}}
 {{- range .Values.persistences }}
 ---
-{{- if and .enabled (not .existingClaim)  (not .configMap) }}
+{{- if and .enabled (not .existingClaim)  (not .configMap) (not .secret) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

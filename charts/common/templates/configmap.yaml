@@ -1,6 +1,6 @@
 {{- $labels := include "common.labels" . -}}
 {{- range .Values.persistences }}
-{{- if not .size }}
+{{- if .configmap }}
 ---
 apiVersion: v1
 kind: ConfigMap
