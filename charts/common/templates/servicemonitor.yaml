@@ -26,7 +26,7 @@ spec:
       {{- if .Values.monitoring.serviceMonitor.params }}
       params:
         {{- range $key, $value := .Values.monitoring.serviceMonitor.params }}
-        {{ $key }}: {{ $value }}
+        {{ $key }}: {{ $value | quote }}
         {{- end }}
       {{- end }}
       path: '{{ .Values.monitoring.serviceMonitor.path | default "/metrics" }}'
