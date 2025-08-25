@@ -6,7 +6,7 @@ metadata:
     {{- include "common.labels" . | nindent 4 }}
     {{- if .Values.monitoring.serviceMonitor.additionalServiceMonitorLabels }}
 {{ toYaml .Values.monitoring.serviceMonitor.additionalServiceMonitorLabels | indent 4 }}
-    {{- end }}    
+    {{- end }}
   name: {{ template "common.fullname" . }}
 spec:
   selector:
@@ -26,8 +26,7 @@ spec:
       {{- if .Values.monitoring.serviceMonitor.params }}
       params:
         {{- range $key, $value := .Values.monitoring.serviceMonitor.params }}
-        {{ $key }}: 
-          - {{ $value | quote }}
+        {{ $key }}: {{ $value }}
         {{- end }}
       {{- end }}
       path: '{{ .Values.monitoring.serviceMonitor.path | default "/metrics" }}'
@@ -36,6 +35,6 @@ spec:
       {{ $key }}: {{ $value }}
       {{- end }}
       {{- end }}
-      
+
   {{- end }}
 {{- end }}
