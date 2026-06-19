@@ -162,6 +162,19 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/common-1.0.0/common-1.0.0.tgz
     version: 1.0.0
+  grafana-cr:
+  - apiVersion: v2
+    created: "2026-06-19T05:42:54.645440368Z"
+    description: A Helm chart for Deploying Grafana instances using the Grafana Operator
+    digest: 9a2a17f833b49ae5e20f8007a4d047dab77b110577b4bbd86b1335f7163dbc59
+    home: https://github.com/rh-mobb/helm-charts
+    maintainers:
+    - name: paulczar
+    name: grafana-cr
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/grafana-cr-0.5.6/grafana-cr-0.5.6.tgz
+    version: 0.5.6
   mqtt2prom:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -262,4 +275,4 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/wyoming-whisper-0.1.4/wyoming-whisper-0.1.4.tgz
     version: 0.1.4
-generated: "2025-08-25T08:32:05.102372966Z"
+generated: "2026-06-19T05:42:54.645493097Z"
