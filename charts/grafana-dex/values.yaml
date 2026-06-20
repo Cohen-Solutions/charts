@@ -1,7 +1,20 @@
 ---
+fullnameOverride: grafana
 grafana:
   route:
     host: grafana.apps.ocp-acm.olympus.lab
   security:
     admin_user: root
     admin_password: secret
+  auth:
+    disable_login_form: true
+    generic_oauth:
+      enabled: true
+      api_url: ""
+      auth_url: ""
+dex:
+  enabled: true
+  dex_url: "https://dex-monitoring.apps.ocp-acm.olympus.lab"
+  grafana_prefix: ""
+  api_url: "https://api.ocp-acm.olympus.lab:6443"
+  admin_role: "GR-GRAFANA-ADMINS"

@@ -1,0 +1,11 @@
+---
+{{- if .Values.dex.enabled }}
+kind: OAuthClient
+apiVersion: oauth.openshift.io/v1
+metadata:
+  name: {{ include "grafana-dex.fullname" . }}-oauth-client
+secret: grafana-oauth-client
+redirectURIs:
+  - "https://{{ .Values.grafana.route.host }}/login/generic_oauth" 
+grantMethod: prompt
+{{- end }}

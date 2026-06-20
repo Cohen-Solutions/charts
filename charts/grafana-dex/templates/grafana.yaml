@@ -1,4 +1,5 @@
 ---
+{{- $oauthEnabled := .Values.grafana.auth.generic_oauth.enabled | default false }}
 apiVersion: grafana.integreatly.org/v1beta1
 kind: Grafana
 metadata:
@@ -16,11 +17,42 @@ spec:
   config:
     log:
       mode: "console"
+    server:
+      domain: {{ .Values.grafana.route.host }}
+      enforce_domain: 'false'
+      root_url: https://%(domain)s/
+    users:
+      auto_assign_org: "True"
+      default_theme: light
+      editors_can_admin: "True"
+      viewers_can_edit: "True"
+{{- if not $oauthEnabled }}
     auth:
       disable_login_form: "false"
     security:
-      admin_user: {{ .Values.grafana.security.admin_user }}
-      admin_password: {{ .Values.grafana.security.admin_password }}
+{{ .Values.grafana.security | toYaml | indent 6 }}
+{{- end }}
+    auth.generic_oauth:
+      allow_assign_grafana_admin: 'true'
+      allow_sign_up: 'true'
+      api_url: >-
+        {{ .Values.dex.dex_url }}/dex/userinfo
+      auth_url: >-
+        {{ .Values.dex.dex_url }}/dex/auth
+      client_id: grafana
+      email_attribute_path: email
+      enabled: 'true'
+      login_attribute_path: preferred_username
+      name: openshift
+      name_attribute_path: name
+      role_attribute_path: >-
+        contains(groups[*], '{{ .Values.dex.admin_role }}') && 'GrafanaAdmin' ||
+        contains(groups[*], 'grafana-editor') && 'Editor' || 'Viewer'
+      scopes: openid profile email groups
+      # tls_skip_verify_insecure: true
+      token_url: >-
+        {{ .Values.dex.dex_url }}/dex/token
+
   deployment:
     spec:
       template:
@@ -39,3 +71,6 @@ spec:
                   mountPath: /etc/ssl/certs/ca-certificates.crt
                   subPath: ca-bundle.crt
                   readOnly: true
+              env:
+                - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+                  value: grafanasecret
