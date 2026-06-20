@@ -1,0 +1,41 @@
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: {{ include "grafana-dex.fullname" . }}
+  labels:
+    app: grafana
+  {{- include "grafana-dex.labels" . | nindent 4 }}
+spec:
+  # An empty route spec is enough to signal the creation of a default
+  # route to the operator. This can also be used to override defaults
+  # in the route spec.
+  route:
+    spec:
+      host: {{ .Values.grafana.route.host }}
+  config:
+    log:
+      mode: "console"
+    auth:
+      disable_login_form: "false"
+    security:
+      admin_user: {{ .Values.grafana.security.admin_user }}
+      admin_password: {{ .Values.grafana.security.admin_password }}
+  deployment:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: trusted-ca
+              configMap:
+                name: {{ include "grafana-dex.fullname" . }}-certs
+                items:
+                  - key: ca-bundle.crt
+                    path: ca-bundle.crt
+          containers:
+            - name: grafana
+              volumeMounts:
+                - name: trusted-ca
+                  mountPath: /etc/ssl/certs/ca-certificates.crt
+                  subPath: ca-bundle.crt
+                  readOnly: true

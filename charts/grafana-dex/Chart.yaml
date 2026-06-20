@@ -1,0 +1,8 @@
+apiVersion: v2
+description: A Helm chart for Deploying Grafana instances using the Grafana Operator
+home: https://github.com/cohen-solutions/charts
+maintainers:
+- name: ccohen
+name: grafana-dex
+type: application
+version: 0.0.1

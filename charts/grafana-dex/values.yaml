@@ -1,0 +1,7 @@
+---
+grafana:
+  route:
+    host: grafana.apps.ocp-acm.olympus.lab
+  security:
+    admin_user: root
+    admin_password: secret
