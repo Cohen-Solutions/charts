@@ -1,0 +1,30 @@
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: prometheus-thanos
+  namespace: {{ .Release.Namespace }}
+spec:
+  datasource:
+    access: proxy
+    isDefault: false
+    jsonData:
+      tlsSkipVerify: true
+      timeInterval: "5s"
+      httpHeaderName1: Authorization
+    secureJsonData:
+      httpHeaderValue1: "${TOKEN}"
+    name: Prometheus-Thanos
+    type: prometheus
+    url: https://thanos-querier.openshift-monitoring:9091
+
+  valuesFrom:
+    - targetPath: secureJsonData.httpHeaderValue1
+      valueFrom:
+        secretKeyRef:
+          name: grafana-thanos-token
+          key: TOKEN
+
+  instanceSelector:
+    matchLabels:
+      app: grafana

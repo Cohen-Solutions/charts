@@ -31,7 +31,7 @@ spec:
       disable_login_form: "false"
     security:
 {{ .Values.grafana.security | toYaml | indent 6 }}
-{{- end }}
+{{ else }}
     auth.generic_oauth:
       allow_assign_grafana_admin: 'true'
       allow_sign_up: 'true'
@@ -52,7 +52,7 @@ spec:
       # tls_skip_verify_insecure: true
       token_url: >-
         {{ .Values.dex.dex_url }}/dex/token
-
+{{- end }}
   deployment:
     spec:
       template:

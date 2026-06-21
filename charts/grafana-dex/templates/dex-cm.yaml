@@ -1,0 +1,38 @@
+---
+{{- if .Values.dex.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana-dex.fullname" .}}-dex
+  namespace: {{ .Release.Namespace }}
+  labels:
+  {{- include "grafana-dex.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    issuer: {{ .Values.dex.dex_url }}/dex
+    storage:
+      type: memory
+    web:
+      http: 0.0.0.0:8080
+    logger:
+      level: info
+      format: text
+    connectors:
+    - type: openshift
+      id: openshift
+      name: OpenShift
+      config:
+        issuer: {{ .Values.dex.api_url }}
+        clientID: system:serviceaccount:{{ .Release.Namespace }}:{{ include "grafana-dex.fullname" . }}-oauth-sa
+        clientSecret: '{{ "{{" }} getenv "OPENSHIFT_CLIENT_SECRET" {{ "}}" }}'
+        redirectURI: {{ .Values.dex.dex_url }}/dex/callback
+        insecureCA: false
+    oauth2:
+      skipApprovalScreen: true
+    staticClients:
+    - name: 'grafana'
+      id: grafana
+      secret: grafanasecret
+      redirectURIs:
+      - https://{{ .Values.grafana.route.host }}/login/generic_oauth
+{{- end}}

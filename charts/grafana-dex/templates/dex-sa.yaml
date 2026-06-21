@@ -1,0 +1,12 @@
+---
+{{- if .Values.dex.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "grafana-dex.fullname" . }}-oauth-sa
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    serviceaccounts.openshift.io/oauth-redirecturi.first: {{ .Values.dex.dex_url }}/dex/callback
+  labels:
+  {{- include "grafana-dex.labels" . | nindent 4 }}
+{{- end}}

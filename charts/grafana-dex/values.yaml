@@ -10,8 +10,6 @@ grafana:
     disable_login_form: true
     generic_oauth:
       enabled: true
-      api_url: ""
-      auth_url: ""
 dex:
   enabled: true
   dex_url: "https://dex-monitoring.apps.ocp-acm.olympus.lab"

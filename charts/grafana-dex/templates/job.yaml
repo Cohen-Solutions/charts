@@ -1,0 +1,118 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "grafana-dex.fullname" . }}-token-job
+  namespace: {{ .Release.Namespace }}
+  labels:
+  {{- include "grafana-dex.labels" . | nindent 4 }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "grafana-dex.fullname" . }}-token-job
+  namespace: {{ .Release.Namespace }}
+  labels:
+  {{- include "grafana-dex.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "create", "update", "patch", "delete"]
+
+  - apiGroups: [""]
+    resources: ["serviceaccounts"]
+    verbs: ["get"]
+
+  - apiGroups: [""]
+    resources: ["serviceaccounts/token"]
+    verbs: ["create"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "grafana-dex.fullname" . }}-token-job
+  namespace: {{ .Release.Namespace }}
+  labels:
+  {{- include "grafana-dex.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "grafana-dex.fullname" . }}-token-job
+roleRef:
+  kind: Role
+  name: {{ include "grafana-dex.fullname" . }}-token-job
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "grafana-dex.fullname" . }}-thanos-token
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "10"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+  {{- include "grafana-dex.labels" . | nindent 4 }}
+spec:
+  backoffLimit: 6
+  template:
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ include "grafana-dex.fullname" . }}-token-job
+      containers:
+        - name: create-token-secret
+          image: quay.io/openshift/origin-cli:4.20
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              NAMESPACE="{{ .Release.Namespace }}"
+              SA_NAME="{{ include "grafana-dex.fullname" . }}-sa"
+
+              until oc get sa "${SA_NAME}" -n "${NAMESPACE}" >/dev/null 2>&1; do
+                echo "Waiting for serviceaccount ${SA_NAME}..."
+                sleep 5
+              done
+
+              TOKEN="$(oc create token "${SA_NAME}" -n "${NAMESPACE}" --duration=8760h)"
+
+              oc create secret generic grafana-thanos-token \
+                -n "${NAMESPACE}" \
+                --from-literal=TOKEN="Bearer ${TOKEN}" \
+                --dry-run=client -o yaml \
+              | oc label -f - \
+                  app.kubernetes.io/managed-by=Helm \
+                  app.kubernetes.io/instance="{{ .Release.Name }}" \
+                  app.kubernetes.io/name="{{ include "grafana-dex.name" . }}" \
+                  helm.sh/chart="{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}" \
+                  --local -o yaml \
+              | oc annotate -f - \
+                  meta.helm.sh/release-name="{{ .Release.Name }}" \
+                  meta.helm.sh/release-namespace="{{ .Release.Namespace }}" \
+                  --local -o yaml \
+              | oc apply -f -
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "grafana-dex.fullname" . }}-cleanup
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ include "grafana-dex.fullname" . }}-token-job
+      containers:
+        - name: cleanup
+          image: quay.io/openshift/origin-cli:latest
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              oc delete secret grafana-thanos-token -n {{ .Release.Namespace }} --ignore-not-found
