@@ -177,6 +177,18 @@ entries:
     version: 0.5.6
   grafana-dex:
   - apiVersion: v2
+    created: "2026-06-21T08:36:17.889929038Z"
+    description: A Helm chart for Deploying Grafana instances using the Grafana Operator
+    digest: db6ac72f0495f04bd468689e2a4cfbb150fd9e8f0feb6a541eee1b8c32e0767f
+    home: https://github.com/cohen-solutions/charts
+    maintainers:
+    - name: ccohen
+    name: grafana-dex
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/grafana-dex-1.0.0/grafana-dex-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
     created: "2026-06-20T11:54:15.864703075Z"
     description: A Helm chart for Deploying Grafana instances using the Grafana Operator
     digest: d05e23fc440cdf48d8ec0a31e54c5abae0e232d63c8e4e4e6d9145f2c3cbfdf1
@@ -300,4 +312,4 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/wyoming-whisper-0.1.4/wyoming-whisper-0.1.4.tgz
     version: 0.1.4
-generated: "2026-06-20T11:54:15.864754623Z"
+generated: "2026-06-21T08:36:17.889973461Z"
