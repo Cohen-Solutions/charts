@@ -8,7 +8,7 @@ metadata:
   name: {{ .Values.vm.name }}
   namespace: {{ .Values.vm.namespace }}
   labels:
-    {{- include "olympus-vms.labels" . | nindent 4 }}
+    {{- include "olympus-vms.labels" $ | nindent 4 }}
 spec:
   runStrategy: {{ .Values.vm.runStrategy | default "Always" }}
 
