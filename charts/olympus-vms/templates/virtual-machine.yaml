@@ -1,0 +1,168 @@
+{{if .Values.vm.name }}
+{{- $ci := .Values.cloudInitDefaults }}
+{{- $vmci := .Values.vm.cloudInit | default dict }}
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: {{ .Values.vm.name }}
+  namespace: {{ .Values.vm.namespace }}
+  labels:
+    {{- include "olympus-vms.labels" . | nindent 4 }}
+spec:
+  runStrategy: {{ .Values.vm.runStrategy | default "Always" }}
+
+  dataVolumeTemplates:
+    - metadata:
+        name: {{ .Values.vm.name }}-volume
+      spec:
+        sourceRef:
+          kind: DataSource
+          name: {{ .Values.vm.image.datasource.name }}
+          namespace: {{ .Values.vm.image.datasource.namespace }}
+        storage:
+          resources:
+            requests:
+              storage: {{ .Values.vm.storage.size }}
+          storageClassName: {{ .Values.vm.storage.storageClassName }}
+
+  instancetype:
+    name: {{ .Values.vm.instancetype }}
+
+  preference:
+    name: {{ .Values.vm.preference }}
+
+  template:
+    metadata:
+      labels:
+        network.kubevirt.io/headlessService: headless
+    spec:
+      tolerations:
+{{- if .Values.vm.tolerations }}
+{{ toYaml .Values.vm.tolerations | indent 6 }}
+{{- else }}
+      - key: node-role.kubernetes.io/infra
+        operator: Equal
+        value: reserved
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/infra
+        operator: Equal
+        value: reserved
+        effect: NoExecute
+{{- end }}
+      domain:
+        devices:
+          autoattachPodInterface: {{ .Values.vm.network.pod.enabled | default false }}
+          disks:
+            - name: rootdisk
+              bootOrder: 1
+              disk:
+                bus: virtio
+            - name: cloudinitdisk
+              cdrom:
+                bus: sata
+          interfaces:
+            {{- if .Values.vm.network.pod.enabled }}
+            - name: default
+              masquerade: {}
+            {{- end }}
+            {{- range .Values.vm.network.interfaces }}
+            - name: {{ .name }}
+              bridge: {}
+{{- if .mtu }}
+              mtu: {{ .mtu }}
+{{- end }}
+              macAddress: {{ .macAddress | quote }}
+            {{- end }}
+
+      networks:
+        {{- if .Values.vm.network.pod.enabled }}
+        - name: default
+          pod: {}
+        {{- end }}
+        {{- range .Values.vm.network.interfaces }}
+        - name: {{ .name }}
+          multus:
+            networkName: {{ .nad }}
+        {{- end }}
+
+      subdomain: headless
+
+      volumes:
+        - name: rootdisk
+          dataVolume:
+            name: {{ .Values.vm.name }}-volume
+        - name: cloudinitdisk
+          cloudInitNoCloud:
+            networkData: |
+              version: 2
+              ethernets:
+{{- range .Values.vm.network.interfaces }}
+                {{ .name }}:
+                  match:
+                    macaddress: {{ .macAddress | quote }}
+                  dhcp4: {{ .dhcp4 | default false }}
+                  dhcp6: {{ .dhcp6 | default false }}
+{{- if .mtu }}
+                  mtu: {{ .mtu }}
+{{- end }}
+{{- if .addresses }}
+                  addresses:
+{{ toYaml .addresses | indent 20 }}
+{{- end }}
+{{- if .gateway4 }}
+                  routes:
+                    - to: default
+                      via: {{ .gateway4 }}
+{{- end }}
+{{- if .nameservers }}
+                  nameservers:
+{{ toYaml .nameservers | indent 20 }}
+{{- end }}
+{{- end }}
+            userData: |
+              #cloud-config
+              hostname: {{ $vmci.hostname | default .Values.vm.name }}
+              create_hostname_file: true
+              timezone: {{ $vmci.timezone | default $ci.timezone }}
+              ssh_pwauth: {{ $vmci.sshPwauth | default $ci.sshPwauth }}
+{{- if $ci.password.enabled }}
+              chpasswd:
+                expire: {{ $ci.password.expire | default false }}
+
+{{- end }}
+              users:
+{{- range $ci.users }}
+                - name: {{ .name }}
+                  groups:
+{{ toYaml .groups | indent 20 }}
+                  sudo: {{ .sudo | quote }}
+                  shell: {{ .shell | default "/bin/bash" }}
+{{- if $ci.password.enabled }}
+                  passwd: {{ $ci.password.hashed | quote }}
+                  lock_passwd: false
+{{- end }}
+                  ssh_authorized_keys:
+{{ toYaml .sshAuthorizedKeys | indent 20 }}
+{{- end }}
+
+              packages:
+{{ toYaml $ci.packages | indent 16 }}
+
+              write_files:
+{{- range $ci.trustedCAs }}
+                - path: /usr/local/share/ca-certificates/{{ .name }}.crt
+                  permissions: "0644"
+                  content: |
+{{ .content | indent 20 }}
+{{- end }}
+
+              runcmd:
+                - update-ca-certificates
+{{- range $vmci.runcmd }}
+                - {{ . | quote }}
+{{- end }}
+
+              final_message: |
+                Cloud-init complete.
+{{- end }}

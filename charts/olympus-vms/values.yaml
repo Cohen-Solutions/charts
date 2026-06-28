@@ -1,0 +1,48 @@
+cloudInitDefaults:
+  timezone: Europe/Paris
+  sshPwauth: false
+  password:
+    enabled: true
+    hashed: $6$KNDySyQ9LRb6AGnw$gyshnkBAShNq6ch91Jrepogz5qUARZ.1TkVuFIyQSmnz0bi3rcYJqRRU/U97BBs8fHXsffa0888G/DhHQwHif.
+  users:
+    - name: ccohen
+      groups:
+        - sudo
+      sudo: ALL=(ALL) NOPASSWD:ALL
+      shell: /bin/bash
+      sshAuthorizedKeys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILJeks0BnzougoCyu8D00H3XiIc9LqJRpejV/l/SqeNZ ccohen@AAP-5CG44348DP
+    - name: ansible
+      groups:
+        - sudo
+      sudo: ALL=(ALL) NOPASSWD:ALL
+      shell: /bin/bash
+      sshAuthorizedKeys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILJeks0BnzougoCyu8D00H3XiIc9LqJRpejV/l/SqeNZ ccohen@AAP-5CG44348DP
+
+
+  packages:
+    - vim
+    - htop
+    - rsync
+    - ca-certificates
+    - curl
+    - wget
+    - git
+
+  trustedCAs:
+    - name: olympus-lab-root
+      content: |
+        -----BEGIN CERTIFICATE-----
+        MIIBtTCCATugAwIBAgIRAIdUARPsNHA5D3qbmgSaETAwCgYIKoZIzj0EAwMwGjEY
+        MBYGA1UEAxMPT2x5bXB1cyBSb290IENBMB4XDTI2MDIxNjIyMDkxNloXDTM2MDIx
+        NDIyMDkxNlowGjEYMBYGA1UEAxMPT2x5bXB1cyBSb290IENBMHYwEAYHKoZIzj0C
+        AQYFK4EEACIDYgAEA0Dn2IgdLbOHj1L75/FftWzgP1aXOl2I2wJZWzFwEjZXt/2c
+        uy3jgWpVsU3GvlRrcLmavIoZAxEpQ+NSeN5WEIf0Nds0UIxRftmh1CMB8N8BV/7N
+        cpvbFkqztNLt5hWTo0UwQzAOBgNVHQ8BAf8EBAMCAQYwEgYDVR0TAQH/BAgwBgEB
+        /wIBATAdBgNVHQ4EFgQU0KqEkAXwlnR1PUGIHUJ2WYZ6DD0wCgYIKoZIzj0EAwMD
+        aAAwZQIwUfYezo/chpDXYSGvd4YRS7qeX8k2su8pU9+0HVgECFJNlEF7G95lgdUx
+        rP8r46CAAjEAvM/lJrhqOm3ITHEo5Lv+OQ354wKfwd+xXF8qO398rh8QtrLeECtN
+        UTe9/vPtHWxL
+        -----END CERTIFICATE-----
+vm: {}
