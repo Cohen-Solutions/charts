@@ -248,6 +248,16 @@ entries:
   olympus-vms:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2026-06-28T15:58:40.090098063Z"
+    description: A Helm chart for Kubernetes
+    digest: a4e1d522f7e47b65d97a613c8d0aa45c687f5a02191feeb02cc6e67d18586420
+    name: olympus-vms
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/olympus-vms-0.1.1/olympus-vms-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2026-06-28T15:36:52.014817882Z"
     description: A Helm chart for Kubernetes
     digest: a6ea4fc30612a36b7b846d5a5134a82472c336df92f0f9e295529e78f7c35d13
@@ -323,4 +333,4 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/wyoming-whisper-0.1.4/wyoming-whisper-0.1.4.tgz
     version: 0.1.4
-generated: "2026-06-28T15:36:52.014871131Z"
+generated: "2026-06-28T15:58:40.090122894Z"
