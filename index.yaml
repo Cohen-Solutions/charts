@@ -245,6 +245,17 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/nut-webui-0.1.0/nut-webui-0.1.0.tgz
     version: 0.1.0
+  olympus-vms:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-06-28T15:36:52.014817882Z"
+    description: A Helm chart for Kubernetes
+    digest: a6ea4fc30612a36b7b846d5a5134a82472c336df92f0f9e295529e78f7c35d13
+    name: olympus-vms
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/olympus-vms-0.1.0/olympus-vms-0.1.0.tgz
+    version: 0.1.0
   powerdns-admin:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -312,4 +323,4 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/wyoming-whisper-0.1.4/wyoming-whisper-0.1.4.tgz
     version: 0.1.4
-generated: "2026-06-21T08:36:17.889973461Z"
+generated: "2026-06-28T15:36:52.014871131Z"
