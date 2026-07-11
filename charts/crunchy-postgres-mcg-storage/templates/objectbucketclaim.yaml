@@ -1,0 +1,17 @@
+{{- if .Values.obc.enabled }}
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: {{ include "crunchy-postgres-mcg-storage.obcName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "crunchy-postgres-mcg-storage.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  bucketName: {{ include "crunchy-postgres-mcg-storage.bucketName" . }}
+  storageClassName: {{ default (include "crunchy-postgres-mcg-storage.obcStorageClassName" .) .Values.obc.storageClassName }}
+  {{- with .Values.obc.additionalConfig }}
+  additionalConfig:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+{{- end }}

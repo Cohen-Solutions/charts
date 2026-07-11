@@ -1,0 +1,25 @@
+{{- if .Values.bucketClass.enabled }}
+apiVersion: noobaa.io/v1alpha1
+kind: BucketClass
+metadata:
+  name: {{ include "crunchy-postgres-mcg-storage.bucketClassName" . }}
+  namespace: {{ .Values.noobaa.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "crunchy-postgres-mcg-storage.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  placementPolicy:
+    tiers:
+      - backingStores:
+{{- $stores := .Values.bucketClass.backingStores -}}
+{{- if not $stores }}
+          - {{ include "crunchy-postgres-mcg-storage.backingStoreName" . }}
+{{- else }}
+{{- range $stores }}
+          - {{ . }}
+{{- end }}
+{{- end }}
+{{- if .Values.bucketClass.placement }}
+        placement: {{ .Values.bucketClass.placement }}
+{{- end }}
+{{- end }}

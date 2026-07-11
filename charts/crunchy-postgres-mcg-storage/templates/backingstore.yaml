@@ -1,0 +1,19 @@
+{{- if .Values.backingStore.enabled }}
+apiVersion: noobaa.io/v1alpha1
+kind: BackingStore
+metadata:
+  name: {{ include "crunchy-postgres-mcg-storage.backingStoreName" . }}
+  namespace: {{ .Values.noobaa.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "crunchy-postgres-mcg-storage.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  type: {{ .Values.backingStore.type }}
+  pvPool:
+    numVolumes: {{ .Values.backingStore.pvPool.numVolumes }}
+    resources:
+{{ toYaml .Values.backingStore.pvPool.resources | indent 6 }}
+    {{- if .Values.backingStore.pvPool.storageClassName }}
+    storageClass: {{ .Values.backingStore.pvPool.storageClassName }}
+    {{- end }}
+{{- end }}

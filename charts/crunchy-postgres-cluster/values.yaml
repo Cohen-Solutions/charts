@@ -1,0 +1,51 @@
+# Tous les noms dérivent de .Release.Name par défaut.
+# Ce chart suppose que le chart storage a déjà créé l'OBC et que le Secret/ConfigMap OBC existent.
+
+nameOverride: ""
+fullnameOverride: ""
+
+obc:
+  # Vide = <release>-s3
+  name: ""
+  # Vide = <release>-s3 ; doit correspondre au bucketName de l'OBC storage
+  bucketName: ""
+
+postgresCluster:
+  enabled: true
+  # Vide = .Release.Name
+  name: "ansible-semaphore"
+  postgresVersion: 16
+  instances:
+    - name: instance1
+      replicas: 1
+      dataVolumeClaimSpec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
+
+postgresStorage:
+  # StorageClass des PVC PostgreSQL, différente du BackingStore S3
+  storageClassName: longhorn-fast
+
+pgbackrest:
+  repoName: repo1
+  secretName: ""
+  endpoint: s3.openshift-storage.svc:443
+  region: ""
+  retentionFull: "7"
+  retentionFullType: count
+  verifyTLS: true
+
+# Ce Job ne touche plus au BackingStore. Il ne fait que convertir le Secret OBC existant en s3.conf pour pgBackRest.
+secretSyncJob:
+  enabled: true
+  name: ""
+  image: registry.redhat.io/openshift4/ose-cli:latest
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+  activeDeadlineSeconds: 300
+  backoffLimit: 2
+  ttlSecondsAfterFinished: 300

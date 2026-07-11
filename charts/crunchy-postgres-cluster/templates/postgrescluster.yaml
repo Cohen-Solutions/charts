@@ -1,0 +1,40 @@
+{{- if .Values.postgresCluster.enabled }}
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: {{ include "crunchy-postgres-cluster.postgresClusterName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "crunchy-postgres-cluster.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  postgresVersion: {{ .Values.postgresCluster.postgresVersion }}
+  instances:
+{{- range .Values.postgresCluster.instances }}
+    - name: {{ .name }}
+      replicas: {{ .replicas }}
+      dataVolumeClaimSpec:
+{{- $dvcs := deepCopy .dataVolumeClaimSpec }}
+{{- if and $.Values.postgresStorage.storageClassName (not (hasKey $dvcs "storageClassName")) }}
+{{- $_ := set $dvcs "storageClassName" $.Values.postgresStorage.storageClassName }}
+{{- end }}
+{{ toYaml $dvcs | indent 8 }}
+{{- end }}
+  backups:
+    pgbackrest:
+      configuration:
+        - secret:
+            name: {{ include "crunchy-postgres-cluster.pgbackrestSecretName" . }}
+      global:
+        {{ .Values.pgbackrest.repoName }}-retention-full: {{ .Values.pgbackrest.retentionFull | quote }}
+        {{ .Values.pgbackrest.repoName }}-retention-full-type: {{ .Values.pgbackrest.retentionFullType }}
+        {{- if not .Values.pgbackrest.verifyTLS }}
+        {{ .Values.pgbackrest.repoName }}-s3-verify-tls: "n"
+        {{- end }}
+      repos:
+        - name: {{ .Values.pgbackrest.repoName }}
+          s3:
+            bucket: {{ include "crunchy-postgres-cluster.bucketName" . }}
+            endpoint: {{ .Values.pgbackrest.endpoint }}
+            region: {{ .Values.pgbackrest.region }}
+{{- end }}

@@ -1,0 +1,14 @@
+{{- if .Values.obcStorageClass.enabled }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ include "crunchy-postgres-mcg-storage.obcStorageClassName" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "crunchy-postgres-mcg-storage.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+provisioner: openshift-storage.noobaa.io/obc
+parameters:
+  bucketclass: {{ default (include "crunchy-postgres-mcg-storage.bucketClassName" .) .Values.obcStorageClass.bucketClassName }}
+reclaimPolicy: {{ .Values.obcStorageClass.reclaimPolicy }}
+volumeBindingMode: {{ .Values.obcStorageClass.volumeBindingMode }}
+{{- end }}
