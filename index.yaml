@@ -162,6 +162,30 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/common-1.0.0/common-1.0.0.tgz
     version: 1.0.0
+  crunchy-postgres-cluster:
+  - apiVersion: v2
+    appVersion: "16"
+    created: "2026-07-11T16:26:54.360533157Z"
+    description: Crunchy PostgresCluster consuming an existing OpenShift MCG/NooBaa
+      ObjectBucketClaim for pgBackRest S3 backups
+    digest: cc93a6672b3084855b3a853baa840b76b021b337eb59f3aa2396092d5970e1d1
+    name: crunchy-postgres-cluster
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/crunchy-postgres-cluster-1.0.0/crunchy-postgres-cluster-1.0.0.tgz
+    version: 1.0.0
+  crunchy-postgres-mcg-storage:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2026-07-11T16:26:54.497434583Z"
+    description: OpenShift MCG/NooBaa storage resources for Crunchy PostgreSQL pgBackRest
+      S3 backups
+    digest: abe9af9502f4dd98681224635b0ee562bb9921391cfe4c5b57a04dcd580ec181
+    name: crunchy-postgres-mcg-storage
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/crunchy-postgres-mcg-storage-1.1.0/crunchy-postgres-mcg-storage-1.1.0.tgz
+    version: 1.1.0
   grafana-cr:
   - apiVersion: v2
     created: "2026-06-19T05:42:54.645440368Z"
@@ -333,4 +357,4 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/wyoming-whisper-0.1.4/wyoming-whisper-0.1.4.tgz
     version: 0.1.4
-generated: "2026-06-28T15:58:40.090122894Z"
+generated: "2026-07-11T16:26:54.497563604Z"
