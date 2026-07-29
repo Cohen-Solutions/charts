@@ -57,7 +57,7 @@ credentialsSecret:
     accessKey: accessKey
     secretKey: secretKey
     endpoint: endpoint
-    bucketName: bucketName
+    bucketName: bucket
   job:
     image:
       repository: registry.redhat.io/openshift4/ose-cli
