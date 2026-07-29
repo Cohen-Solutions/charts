@@ -269,6 +269,17 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/nut-webui-0.1.0/nut-webui-0.1.0.tgz
     version: 0.1.0
+  odf-s3-bucket:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2026-07-29T15:49:04.763895876Z"
+    description: OpenShift MCG/NooBaa storage resources for S3 buckets
+    digest: 9bd246953675c8b39f497b1ff503b9f9c894852c470b4a966b31062648890dff
+    name: odf-s3-bucket
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/odf-s3-bucket-1.1.0/odf-s3-bucket-1.1.0.tgz
+    version: 1.1.0
   olympus-vms:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -357,4 +368,4 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/wyoming-whisper-0.1.4/wyoming-whisper-0.1.4.tgz
     version: 0.1.4
-generated: "2026-07-11T16:26:54.497563604Z"
+generated: "2026-07-29T15:49:04.763970234Z"
