@@ -44,3 +44,24 @@ obc:
   # Vide = storageclass générée par ce chart
   storageClassName: ""
   additionalConfig: {}
+
+# Crée un Secret applicatif à partir des identifiants générés par ODF pour l'OBC.
+credentialsSecret:
+  enabled: true
+  # Vide = <release>-s3-credentials
+  name: ""
+  endpoint: https://s3.openshift-storage.svc.cluster.local
+  # Secret créé automatiquement par ODF. Vide = nom de l'OBC.
+  sourceSecretName: ""
+  keys:
+    accessKey: accessKey
+    secretKey: secretKey
+    endpoint: endpoint
+  job:
+    image:
+      repository: registry.redhat.io/openshift4/ose-cli
+      tag: v4.16
+      pullPolicy: IfNotPresent
+    timeoutSeconds: 300
+    backoffLimit: 3
+    resources: {}

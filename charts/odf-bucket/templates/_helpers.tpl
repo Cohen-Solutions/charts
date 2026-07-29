@@ -29,3 +29,11 @@
 {{- define "odf-s3-bucket.bucketName" -}}
 {{- default (include "odf-s3-bucket.obcName" .) .Values.obc.bucketName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{- define "odf-s3-bucket.credentialsSecretName" -}}
+{{- default (printf "%s-credentials" (include "odf-s3-bucket.obcName" .)) .Values.credentialsSecret.name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "odf-s3-bucket.credentialsJobName" -}}
+{{- printf "%s-credentials" (include "odf-s3-bucket.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
