@@ -1,0 +1,17 @@
+{{- if .Values.obc.enabled }}
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: {{ include "odf-s3-bucket.obcName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "odf-s3-bucket.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  bucketName: {{ include "odf-s3-bucket.bucketName" . }}
+  storageClassName: {{ default (include "odf-s3-bucket.obcStorageClassName" .) .Values.obc.storageClassName }}
+  {{- with .Values.obc.additionalConfig }}
+  additionalConfig:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+{{- end }}

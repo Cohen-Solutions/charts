@@ -1,0 +1,25 @@
+{{- if .Values.bucketClass.enabled }}
+apiVersion: noobaa.io/v1alpha1
+kind: BucketClass
+metadata:
+  name: {{ include "odf-s3-bucket.bucketClassName" . }}
+  namespace: {{ .Values.noobaa.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "odf-s3-bucket.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  placementPolicy:
+    tiers:
+      - backingStores:
+{{- $stores := .Values.bucketClass.backingStores -}}
+{{- if not $stores }}
+          - {{ include "odf-s3-bucket.backingStoreName" . }}
+{{- else }}
+{{- range $stores }}
+          - {{ . }}
+{{- end }}
+{{- end }}
+{{- if .Values.bucketClass.placement }}
+        placement: {{ .Values.bucketClass.placement }}
+{{- end }}
+{{- end }}

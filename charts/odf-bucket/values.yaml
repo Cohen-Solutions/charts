@@ -1,0 +1,46 @@
+# Tous les noms dérivent de .Release.Name par défaut.
+# Exemple releaseName=ansible-semaphore : ansible-semaphore-backing-store, ansible-semaphore-s3, etc.
+
+nameOverride: ""
+fullnameOverride: ""
+
+noobaa:
+  namespace: openshift-storage
+
+backingStore:
+  enabled: true
+  name: ""
+  type: pv-pool
+  # pv-pool = BackingStore basé sur des PVC
+  pvPool:
+    numVolumes: 1
+    storageClassName: lvm-bulk-data
+    resources:
+      requests:
+        storage: 100Gi
+
+bucketClass:
+  enabled: true
+  name: ""
+  # Optionnel. Avec un seul BackingStore, on laisse vide pour éviter un placementPolicy inutile.
+  # Si plusieurs BackingStores sont listés, tu peux mettre Spread ou Mirror.
+  placement: ""
+  # Vide = utilise le backingStore généré par ce chart
+  backingStores: []
+
+obcStorageClass:
+  enabled: true
+  name: ""
+  reclaimPolicy: Delete
+  volumeBindingMode: Immediate
+  # Vide = utilise la bucketClass générée par ce chart
+  bucketClassName: ""
+
+obc:
+  enabled: true
+  name: ""
+  # Vide = <release>-s3
+  bucketName: ""
+  # Vide = storageclass générée par ce chart
+  storageClassName: ""
+  additionalConfig: {}
