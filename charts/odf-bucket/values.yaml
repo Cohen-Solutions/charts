@@ -14,7 +14,7 @@ backingStore:
   # pv-pool = BackingStore basé sur des PVC
   pvPool:
     numVolumes: 1
-    storageClassName: lvm-bulk-data
+    storageClassName: longhorn-bulk
     resources:
       requests:
         storage: 100Gi
