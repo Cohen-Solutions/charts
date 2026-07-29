@@ -54,8 +54,8 @@ credentialsSecret:
   # Secret créé automatiquement par ODF. Vide = nom de l'OBC.
   sourceSecretName: ""
   keys:
-    accessKey: accessKey
-    secretKey: secretKey
+    accessKey: access_key_id
+    secretKey: access_key_secret
     endpoint: endpoint
     bucketName: bucket
   job:
