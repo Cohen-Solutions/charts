@@ -272,6 +272,16 @@ entries:
   odf-s3-bucket:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2026-07-29T17:28:08.726659525Z"
+    description: OpenShift MCG/NooBaa storage resources for S3 buckets
+    digest: 375a3da1ff70d1cac4f702c8e30e3f0d7f48c8f7b1b7c2956733979073e68311
+    name: odf-s3-bucket
+    type: application
+    urls:
+    - https://github.com/Cohen-Solutions/charts/releases/download/odf-s3-bucket-1.2.3/odf-s3-bucket-1.2.3.tgz
+    version: 1.2.3
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2026-07-29T17:09:06.68241864Z"
     description: OpenShift MCG/NooBaa storage resources for S3 buckets
     digest: 6f4a5cc18c5551e3abeef61833753c4720838adbaadb85af895569999e3f419b
@@ -398,4 +408,4 @@ entries:
     urls:
     - https://github.com/Cohen-Solutions/charts/releases/download/wyoming-whisper-0.1.4/wyoming-whisper-0.1.4.tgz
     version: 0.1.4
-generated: "2026-07-29T17:09:06.682484894Z"
+generated: "2026-07-29T17:28:08.726714377Z"
