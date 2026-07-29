@@ -60,7 +60,7 @@ credentialsSecret:
   job:
     image:
       repository: registry.redhat.io/openshift4/ose-cli
-      tag: v4.16
+      tag: latest
       pullPolicy: IfNotPresent
     timeoutSeconds: 300
     backoffLimit: 3
